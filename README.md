@@ -63,3 +63,7 @@ ACCESS_APP_DOMAIN=suica-mf-forwarder.example.workers.dev \
 ACCESS_ALLOWED_EMAIL=owner@example.com \
 npm run setup:access
 ```
+
+## License
+
+GPL-3.0-or-later. See `LICENSE`.

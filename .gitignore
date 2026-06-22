@@ -11,6 +11,7 @@ node_modules/
 output/
 tmp/
 hatch-pet-runs/
+pets/
 .agents/
 .codex/
 
