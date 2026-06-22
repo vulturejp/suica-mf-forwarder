@@ -1,0 +1,17 @@
+.DS_Store
+.env*
+!.env.example
+
+wrangler.toml
+.wrangler/
+.wrangler-home/
+.pnpm-store/
+node_modules/
+
+output/
+tmp/
+hatch-pet-runs/
+.agents/
+.codex/
+
+*.pdf

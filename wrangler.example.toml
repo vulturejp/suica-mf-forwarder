@@ -1,0 +1,34 @@
+name = "suica-mf-forwarder"
+main = "src/worker-app.mjs"
+compatibility_date = "2026-06-20"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+FORWARD_TO_EMAIL = "your-real-mailbox@example.com"
+ACCESS_ALLOWED_EMAIL = "your-real-mailbox@example.com"
+MF_SUICA_ACCOUNT_NAME = "SUICA"
+MF_SUICA_ACCOUNT_DETAIL_URL = "https://ssnb.x.moneyforward.com/accounts/show_manual/<account-id>"
+MF_MANUAL_EXPENSE_URL = "https://ssnb.x.moneyforward.com/accounts/show_manual/<account-id>"
+
+[browser]
+binding = "BROWSER"
+
+[[kv_namespaces]]
+binding = "SUICA_MF_KV"
+id = "replace-with-production-kv-id"
+preview_id = "replace-with-preview-kv-id"
+
+[[r2_buckets]]
+binding = "SUICA_PDF_BUCKET"
+bucket_name = "suica-pdfs"
+preview_bucket_name = "suica-pdfs-preview"
+
+# Secrets:
+#   wrangler secret put MF_EMAIL
+#   wrangler secret put MF_PASSWORD
+#   wrangler secret put UPLOAD_AUTH_TOKEN
+#
+# Money Forward OTP emails should be routed to this Worker.
+# The Worker stores the code in SUICA_MF_KV and forwards every email to
+# FORWARD_TO_EMAIL so normal mail is not swallowed by Email Routing.
+#   suica-mf-vericode
