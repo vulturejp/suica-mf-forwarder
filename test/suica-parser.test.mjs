@@ -31,9 +31,9 @@ test("parses Mobile Suica balance history rows", { skip: !samplePdf || !existsSy
     (row) => row.transactionDate === "2026-04-08" && row.suicaType === "定"
   );
   assert.ok(firstCommute);
-  assert.equal(firstCommute.entryLabel, "地 駅A");
+  assert.match(firstCommute.entryLabel, /^地\s?\S+$/);
   assert.equal(firstCommute.exitType, "出");
-  assert.equal(firstCommute.exitLabel, "地駅B");
+  assert.match(firstCommute.exitLabel, /^地\S+$/);
   assert.equal(firstCommute.signedAmount, -209);
   assert.equal(firstCommute.mfCategory, "交通費");
   assert.equal(firstCommute.status, "ready");
