@@ -48,13 +48,6 @@ app.post("/upload", async (c) => {
 
     const bytes = new Uint8Array(await file.arrayBuffer());
     const objectKey = buildPdfObjectKey(file.name);
-
-    if (env.SUICA_PDF_BUCKET) {
-      await env.SUICA_PDF_BUCKET.put(objectKey, bytes, {
-        httpMetadata: { contentType: "application/pdf" }
-      });
-    }
-
     const parsed = await parseSuicaPdfBytes(bytes, {
       sourceName: objectKey,
       ...buildParserOptions(env)

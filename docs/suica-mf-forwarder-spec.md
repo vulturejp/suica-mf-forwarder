@@ -27,11 +27,9 @@ The PDF is treated as the source of truth for Suica transaction identity. Money 
 ```text
 Email Worker
   Receives email with attached Suica PDF
-  Stores the PDF in R2
-  Sends a parse job to Queue
+  Parses the attachment in the Worker request
 
 Parser Worker
-  Reads the PDF from R2
   Extracts text using a JavaScript PDF parser such as pdfjs-dist
   Normalizes Suica rows
   Writes parsed rows and fingerprints to D1
@@ -51,7 +49,6 @@ Review UI Worker
 ## Cloudflare Components
 
 - Workers: Email receiving, parsing, posting, review UI.
-- R2: Stores original PDF files.
 - D1: Stores transaction ledger and posting state.
 - Queues: Decouples PDF parsing and Money Forward posting.
 - Browser Run: Runs headless browser automation for Money Forward.
@@ -590,7 +587,6 @@ Pros:
 
 - Natural periodic workflow from mobile or desktop.
 - Works well with Cloudflare Workers.
-- Original PDF can be stored in R2.
 - The email itself becomes an audit trail.
 
 Cons:
@@ -605,9 +601,9 @@ Recommended use:
 Not preferred for this project. Keep only as a possible future fallback.
 ```
 
-### Option C: Signed Upload URL
+### Option C: Token-Protected Upload URL
 
-The system exposes a temporary signed URL. The user uploads the PDF directly to R2 or through a Worker.
+The system exposes a temporary or token-protected Worker upload URL. The user uploads the PDF through the Worker.
 
 Pros:
 
@@ -678,18 +674,17 @@ Production:
   Authenticated upload page.
 
 Admin/recovery:
-  Signed upload URL or local CLI.
+  Token-protected upload URL or local CLI.
 ```
 
 Every accepted PDF must go through the same processing pipeline:
 
-1. Store original PDF in R2.
+1. Parse rows from the uploaded PDF bytes.
 2. Create a PDF ingestion record in D1.
-3. Parse rows.
-4. Compute row fingerprints.
-5. Apply card-level cutover.
-6. Apply duplicate and review rules.
-7. Queue only postable spending rows.
+3. Compute row fingerprints.
+4. Apply card-level cutover.
+5. Apply duplicate and review rules.
+6. Queue only postable spending rows.
 
 ## Money Forward Posting Methods
 
@@ -996,7 +991,7 @@ Unknown posting result:
 ## Security Notes
 
 - Store Money Forward credentials as Workers secrets.
-- Store original PDFs in a private R2 bucket.
+- Do not persist original PDFs unless there is a specific retention requirement.
 - Do not log raw full PDFs.
 - Avoid logging Money Forward password or verification code.
 - Keep Browser Run automation scoped to Money Forward.
@@ -1006,7 +1001,7 @@ Unknown posting result:
 1. Build a local parser test using sample Suica PDFs and expected JSON fixtures.
 2. Implement Worker-compatible PDF parsing with `pdfjs-dist`.
 3. Add D1 schema and fingerprint insertion.
-4. Add parser Queue consumer and R2 PDF storage.
+4. Add parser Queue consumer.
 5. Adapt the existing ANA Pay Money Forward consumer to Suica wallet entries.
 6. Add posting statuses, especially `unknown`.
 7. Add a minimal review UI for `needs_review` and `unknown`.

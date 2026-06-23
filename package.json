@@ -11,8 +11,6 @@
     "secret:upload-auth": "HOME=.wrangler-home wrangler secret put UPLOAD_AUTH_TOKEN",
     "provision:kv": "HOME=.wrangler-home wrangler kv namespace create SUICA_MF_KV",
     "provision:kv-preview": "HOME=.wrangler-home wrangler kv namespace create SUICA_MF_KV --preview",
-    "provision:r2": "HOME=.wrangler-home wrangler r2 bucket create suica-pdfs",
-    "provision:r2-preview": "HOME=.wrangler-home wrangler r2 bucket create suica-pdfs-preview",
     "setup:email-routing": "node scripts/setup-email-routing.mjs",
     "setup:access": "node scripts/setup-cloudflare-access.mjs",
     "test": "node --test"

@@ -18,11 +18,6 @@ binding = "SUICA_MF_KV"
 id = "replace-with-production-kv-id"
 preview_id = "replace-with-preview-kv-id"
 
-[[r2_buckets]]
-binding = "SUICA_PDF_BUCKET"
-bucket_name = "suica-pdfs"
-preview_bucket_name = "suica-pdfs-preview"
-
 # Secrets:
 #   wrangler secret put MF_EMAIL
 #   wrangler secret put MF_PASSWORD
